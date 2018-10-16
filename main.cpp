@@ -52,12 +52,6 @@ void draw_cell(int cell_id)
     draw_cell(xk*CELL_SIZE, yk*CELL_SIZE);
 }
 
-//when unpausing
-void unpause()
-{
-    PAUSE = !PAUSE;
-}
-
 void onmouse()
 {
     sf::Vector2i mouse_pos = sf::Mouse::getPosition(window);
@@ -75,37 +69,60 @@ void main_game()
     if(!PAUSE)
     {
         //Without border cells
-        for(int i = 1;i<19;i++)
+        for(int i = 0;i<20;i++)
         {
-            for(int j = 1;j<19;j++)
+            for(int j = 0;j<20;j++)
             {
                 //Magick. Rework!!!
                 int alive_count = 0;
+                if(i != 0 && i != 20 && j != 0 && j != 20)
+                {
+                    if(cells[i][j+1])
+                        alive_count++;
 
-                if(cells[i][j+1])
-                    alive_count++;
+                    if(cells[i+1][j])
+                        alive_count++;
 
-                if(cells[i+1][j])
-                    alive_count++;
+                    if(cells[i+1][j+1])
+                        alive_count++;
 
-                if(cells[i+1][j+1])
-                    alive_count++;
+                    if(cells[i][j-1])
+                        alive_count++;
 
-                if(cells[i][j-1])
-                    alive_count++;
+                    if(cells[i-1][j])
+                        alive_count++;
 
-                if(cells[i-1][j])
-                    alive_count++;
+                    if(cells[i-1][j-1])
+                        alive_count++;
 
-                if(cells[i-1][j-1])
-                    alive_count++;
+                    if(cells[i-1][j+1])
+                        alive_count++;
 
-                if(cells[i-1][j+1])
-                    alive_count++;
+                    if(cells[i+1][j-1])
+                        alive_count++;
+                }
+                if(i == 0 || j == 0)
+                {
+                    if(cells[i][j+1])
+                        alive_count++;
 
-                if(cells[i+1][j-1])
-                    alive_count++;
+                    if(cells[i+1][j+1])
+                        alive_count++;
 
+                    if(cells[i+1][j])
+                        alive_count++;
+                }
+                if(i == 20 || j == 20)
+                {
+                    if(cells[i][j-1])
+                        alive_count++;
+
+                    if(cells[i-1][j-1])
+                        alive_count++;
+
+                    if(cells[i-1][j])
+                        alive_count++;
+                }
                 //Calculating alive and dead cells
                 if(!cells[i][j] && alive_count==3)
                     cells[i][j] = true;
@@ -138,7 +155,7 @@ int main()
         {
             if(event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
             {
-                unpause();
+                PAUSE = !PAUSE;
             }
             if(event.MouseLeft && PAUSE)
             {
